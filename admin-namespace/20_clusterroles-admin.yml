@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: admin-reader
+  namespace: admin-namespace
+  labels:
+    # Add these permissions to the "admin" and "edit" default roles.
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-update: "true"
+rules:
+- apiGroups: [""]
+  resources: ["admin"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: read-admin-global
+subjects:
+- kind: Group
+  name: administrateur
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: admin-reader
+  apiGroup: rbac.authorization.k8s.io
