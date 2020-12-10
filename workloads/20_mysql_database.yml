@@ -1,0 +1,20 @@
+apiVersion: kubedb.com/v1alpha2
+kind: MySQL
+metadata:
+  name: mysql
+  namespace: data-namespace
+spec:
+  version: "8.0.21"
+  storageType: Durable
+  storage:
+    storageClassName: "default"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  terminationPolicy: WipeOut
+  init:
+    script:
+      configMap:
+        name: mysql-init-script

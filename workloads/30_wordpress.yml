@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress 
+  namespace: web-namespace 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: 10.0.111.147:3306
+        - name: WORDPRESS_DB_USER
+          value: wordpress
+        - name: WORDPRESS_DB_PASSWORD
+          value: M0td3p4ss3
+        - name: WORDPRESS_DB_NAME
+          value: wordpress
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress  
+  namespace: web-namespace 
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: wordpress
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress
+  namespace: web-namespace 
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+  - host: wordpress.3b314832953a46d2bb6c.francecentral.aksapp.io
+    http:
+      paths:
+      - backend:
+          serviceName: wordpress
+          servicePort: 80
+        path: /
