@@ -1,0 +1,20 @@
+apiVersion: kubedb.com/v1alpha2
+kind: Snapshot
+metadata:
+  name: azure-snapshot
+  namespace: data-namespace
+  labels:
+    kubedb.com/kind: Postgres  
+spec:
+  databaseName: k8sbackupstorage
+  storageSecretName: azure-secret
+  azure:
+    container: backup-container
+    prefix: backup
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
