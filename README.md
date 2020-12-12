@@ -38,3 +38,20 @@ kubectl apply -f data-namespace/10_quota.yml
 kubectl apply -f web-namespace/00_web-namespace.yml
 kubectl apply -f web-namespace/10_quota.yml
 ```
+
+## Azure backup
+```bash
+# Nab the id and the name
+echo -n '<your-azure-storage-account-name>' > AZURE_ACCOUNT_NAME
+echo -n '<your-azure-storage-account-key>' > AZURE_ACCOUNT_KEY
+
+# Create a generic azure secret
+kubectl create secret generic azure-secret \
+    --from-file=./AZURE_ACCOUNT_NAME \
+    --from-file=./AZURE_ACCOUNT_KEY
+kubectl create -f backend/azure-snapshot.yml
+
+# How to check
+kubectl get secret azure-secret -o yaml
+kubectl get snapshot azure-snapshot -o yaml
+```
