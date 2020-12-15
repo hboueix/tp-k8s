@@ -1,4 +1,4 @@
-apiVersion: kubedb.com/v1alpha1
+apiVersion: kubedb.com/v1beta
 kind: Snapshot
 metadata:
   name: azure-snapshot
@@ -11,10 +11,3 @@ spec:
   azure:
     container: backup-container
     prefix: backup
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
